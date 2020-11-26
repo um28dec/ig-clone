@@ -6,7 +6,11 @@ const Profile = ()=> {
   const [userProfile, setProfile] = useState(null);
   const {state,dispatch} = useContext(UserContext);
   const {userid} = useParams();
-  const [showfollow, setShowFollow] = useState(state?!state.following.includes(userid):true);
+  const [showfollow, setShowFollow] = useState(true);
+
+  useEffect(()=>{
+    setShowFollow(state&&!state.following.includes(userid))
+  },state)
 
   useEffect(()=>{
    fetch(`/user/${userid}`,{
@@ -57,7 +61,7 @@ const Profile = ()=> {
            "Authorization": "Bearer "+localStorage.getItem("jwt")
         },
         body:JSON.stringify({
-          unfollowid:userid
+          unfollowId:userid
         })
        }).then(res=>res.json())
        .then(data=>{
